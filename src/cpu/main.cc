@@ -13,21 +13,13 @@ namespace cpu
 {
     cv::Mat process_image(cv::Mat &img)
     {
-        auto img_gray = grayscale(img);
-        img_gray = blur(img_gray);
-
-        int closing_kern_size = 31; // TODO compute from input size
-        int opening_kern_size = 51;
-
-        auto closing_kern = generate_circle_kernel(closing_kern_size);
-        auto opening_kern = generate_circle_kernel(opening_kern_size);
-
-        img_gray = closing(img_gray, closing_kern);
-        img_gray = opening(img_gray, opening_kern);
-
-        const auto blobs = ccl(img_gray);
-
-        common::draw_contours(img, blobs);
-        return img;
+        cv::Mat red_cone_filtered;
+        cv::Mat yellow_cone_filtered;
+        cvtColor(img, img, cv::COLOR_BGR2HSV);
+        // get all white cone (white == yellow == turn right)
+        cv::inRange(img, cv::Scalar(45, 165, 130), cv::Scalar(180, 255, 200), yellow_cone_filtered);
+        // get all yellow cone (yellow == red == turn left)
+        cv::inRange(img, cv::Scalar(30, 100, 100), cv::Scalar(50, 255, 255), red_cone_filtered);
+        return yellow_cone_filtered;
     }
 } // namespace cpu
