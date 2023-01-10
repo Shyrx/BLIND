@@ -1,0 +1,10 @@
+Faire une sorte de lakes pour détecter les plots
+Se baser sur le point de départ (en bas au milieu) pour tracer le début de la ligne de trajet
+Pour les points, faut match les plots ensemble et ajouter un points au milieu.
+-> Faire un threshold de taille, si des plots on trop de taille diff, ça veut dire qu'on essaie de match 2 plots qui vont pas ensemble
+Pas besoin de plus du point de départ et de celui de la première paire de plots
+Si ya qu'une seule couleur de plots à l'écran, match les plots avec une ligne allant au bord de l'écran, et faire le point à 70% vers le bord de l'écran depuis le plot.
+
+Réduire la qualité de l'image pour que le traitement prenne pas trop de temps.
+Définir un threshold en terme de pixel sur la taille minimal d'un lakes.
+-> Les plots trop petit sont trop loins et on ne souhaite pas les prendre en compte.
