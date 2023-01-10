@@ -49,33 +49,45 @@ namespace blind
 
             return out;
         }
+
+        cv::Mat filterOnColor(cv::Mat &img, cv::Scalar &low, cv::Scalar &high)
+        {
+            cv::Mat res;
+            cv::inRange(img, low, high, res);
+            return res;
+        }
+
+        cv::Mat fuseMat(cv::Mat &first, cv::Mat &second)
+        {
+            return cv::max(first, second);
+        }
+
+        void remove_noise(cv::Mat &img)
+        {
+            opening(img);
+            closing(img);
+        }
     } // namespace
+
+    cv::Scalar white_low = cv::Scalar(170, 150, 150);
+    cv::Scalar white_high = cv::Scalar(190, 255, 255);
+
+    cv::Scalar yellow_low = cv::Scalar(30, 100, 150);
+    cv::Scalar yellow_high = cv::Scalar(50, 255, 255);
 
     cv::Mat draw_traject(cv::Mat &img)
     {
-        // 1 - Use HSV to filter red and yellow cone
-        cv::Mat red_cones, yellow_cones;
-
+        // Use HSV to filter red and yellow cone
         cvtColor(img, img, cv::COLOR_BGR2HSV);
-        // get all white cone (white == yellow == turn right)
-        cv::inRange(img, cv::Scalar(170, 150, 150), cv::Scalar(190, 255, 255),
-                    yellow_cones);
-        // get all yellow cone (yellow == red == turn left)
-        cv::inRange(img, cv::Scalar(30, 100, 150), cv::Scalar(50, 255, 255),
-                    red_cones);
+        cv::Mat red_cones = filterOnColor(img, yellow_low, yellow_high);
+        cv::Mat yellow_cones = filterOnColor(img, white_low, white_high);
+        cv::Mat all_cones = fuseMat(red_cones, yellow_cones);
 
-        // 2 - Get left and right cones
-        cv::Mat all_cones;
-        cv::max(yellow_cones, red_cones, all_cones);
-
-        opening(all_cones);
-        closing(all_cones);
+        remove_noise(all_cones);
 
         cv::Mat labels, stats, centroids;
         const auto nb_labels = cv::connectedComponentsWithStats(
             all_cones, labels, stats, centroids);
-
-        std::cout << "components: " << nb_labels << '\n';
 
         const auto res = draw_boxes(all_cones, stats, nb_labels);
 
