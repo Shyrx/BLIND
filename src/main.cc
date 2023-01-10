@@ -65,7 +65,7 @@ void process_video(std::string video_path, std::string output_path)
     }
 }
 
-void capture_camera(std::string output_path)
+void capture_camera()
 {
     cv::Mat frame;
     cv::VideoCapture cap;
@@ -85,7 +85,9 @@ void capture_camera(std::string output_path)
             std::cerr << "Blank frame, aborting\n";
             return;
         }
-        cv::imshow("Live", frame);
+
+        // faire du processing sur `frame` ici
+
         if (cv::waitKey(5) >= 0)
             break;
     }
@@ -93,16 +95,16 @@ void capture_camera(std::string output_path)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 4)
+    const std::string process_mode(argv[1]);
+
+    if (argc != 4 && process_mode != "camera")
     {
         std::cerr << "Usage:\n"
                   << "\t" << argv[0] << " image input output\n"
                   << "\t" << argv[0] << " video input output\n"
-                  << "\t" << argv[0] << " camera output\n";
+                  << "\t" << argv[0] << " camera\n";
         return 1;
     }
-
-    const std::string process_mode(argv[1]);
 
     if (process_mode == "image")
     {
@@ -115,7 +117,7 @@ int main(int argc, char *argv[])
     }
     else if (process_mode == "camera")
     {
-        capture_camera(argv[2]);
+        capture_camera();
     }
 
     return 0;

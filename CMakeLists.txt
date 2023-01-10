@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.3)
+cmake_minimum_required(VERSION 3.18)
 
 project(blind LANGUAGES C CXX ASM)
 
