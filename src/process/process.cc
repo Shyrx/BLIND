@@ -2,14 +2,17 @@
 
 #include <iostream>
 #include <opencv2/core.hpp>
+#include <opencv2/core/hal/interface.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
 #include <opencv2/imgproc.hpp>
 
 namespace blind
 {
     namespace
     {
-        constexpr const auto closing_kern_size = 21;
-        constexpr const auto opening_kern_size = 31;
+        constexpr const auto closing_kern_size = 5;
+        constexpr const auto opening_kern_size = 15;
 
         void closing(cv::Mat &mat)
         {
@@ -67,6 +70,36 @@ namespace blind
             opening(img);
             closing(img);
         }
+
+        cv::Point getDirection(const cv::Point &base, const int nb_labels,
+                               cv::Mat &centroids, cv::Mat &yellow_cones)
+        {
+            cv::Point red(0, 0);
+            cv::Point yellow(0, 0);
+            for (int i = 1; i < nb_labels; i++)
+            {
+                cv::Point p(centroids.at<double>(i, 0),
+                            centroids.at<double>(i, 1));
+                auto val = yellow_cones.at<unsigned char>(p);
+
+                if (val != 0)
+                {
+                    if (yellow.dot(base) < p.dot(base))
+                        yellow = p;
+                }
+                else
+                {
+                    if (red.dot(base) < p.dot(base))
+                        red = p;
+                }
+            }
+            cv::Point mid =
+                cv::Point((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
+            if (mid.x == 0 && mid.y == 0)
+                mid = cv::Point(yellow_cones.cols / 2, yellow_cones.rows / 2);
+
+            return mid;
+        }
     } // namespace
 
     cv::Scalar white_low = cv::Scalar(170, 150, 150);
@@ -75,23 +108,29 @@ namespace blind
     cv::Scalar yellow_low = cv::Scalar(30, 100, 150);
     cv::Scalar yellow_high = cv::Scalar(50, 255, 255);
 
-    cv::Mat draw_traject(cv::Mat &img)
+    cv::Mat draw_traject(cv::Mat &original)
     {
+        cv::Mat img;
         // Use HSV to filter red and yellow cone
-        cvtColor(img, img, cv::COLOR_BGR2HSV);
-        cv::Mat red_cones = filterOnColor(img, yellow_low, yellow_high);
-        cv::Mat yellow_cones = filterOnColor(img, white_low, white_high);
-        cv::Mat all_cones = fuseMat(red_cones, yellow_cones);
+        cvtColor(original, img, cv::COLOR_BGR2HSV);
+        cv::Mat yellow_cones = filterOnColor(img, yellow_low, yellow_high);
+        remove_noise(yellow_cones);
+        cv::Mat red_cones = filterOnColor(img, white_low, white_high);
+        remove_noise(red_cones);
 
-        remove_noise(all_cones);
+        cv::Mat all_cones = fuseMat(red_cones, yellow_cones);
 
         cv::Mat labels, stats, centroids;
         const auto nb_labels = cv::connectedComponentsWithStats(
             all_cones, labels, stats, centroids);
 
-        const auto res = draw_boxes(all_cones, stats, nb_labels);
+        cv::Point base(img.cols / 2, img.rows);
+        cv::Point mid = getDirection(base, nb_labels, centroids, yellow_cones);
 
-        return res;
+        cvtColor(all_cones, all_cones, cv::COLOR_GRAY2BGR);
+        cv::arrowedLine(all_cones, base, mid, cv::Scalar(255, 255, 255));
+
+        return all_cones;
 
         // 3 - Match cones together
         // 4 - Draw traject
