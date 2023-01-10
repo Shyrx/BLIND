@@ -1,5 +1,6 @@
 #include "process.hh"
 
+#include <cmath>
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/core/hal/interface.h>
@@ -71,6 +72,11 @@ namespace blind
             closing(img);
         }
 
+        unsigned int dist(const cv::Point &a, const cv::Point &b)
+        {
+            return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+        }
+
         cv::Point getDirection(const cv::Point &base, const int nb_labels,
                                cv::Mat &centroids, cv::Mat &yellow_cones)
         {
@@ -84,12 +90,12 @@ namespace blind
 
                 if (val != 0)
                 {
-                    if (yellow.dot(base) < p.dot(base))
+                    if (dist(base, yellow) > dist(base, p))
                         yellow = p;
                 }
                 else
                 {
-                    if (red.dot(base) < p.dot(base))
+                    if (dist(base, red) > dist(base, p))
                         red = p;
                 }
             }
