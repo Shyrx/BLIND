@@ -33,3 +33,6 @@
 
 build
 output
+/.cache/
+/.direnv/
+/compile_commands.json
