@@ -12,8 +12,8 @@ namespace blind
 {
     namespace
     {
-        constexpr const auto closing_kern_size = 5;
-        constexpr const auto opening_kern_size = 15;
+        constexpr const auto closing_kern_size = 30;
+        constexpr const auto opening_kern_size = 16;
 
         void closing(cv::Mat &mat)
         {
