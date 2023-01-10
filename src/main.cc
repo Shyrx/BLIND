@@ -1,25 +1,20 @@
-#include "cpu/main.hh"
-
 #include <filesystem>
 #include <iostream>
+#include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
 #include <string>
 
-void process_image(std::string input_path, std::string output_path)
+#include "process.hh"
+
+void process_image(const std::filesystem::path &input,
+                   const std::filesystem::path &output)
 {
-    std::cout << "start read" << std::endl;
-    const std::filesystem::path input(input_path);
-    auto img_color = cv::imread(input);
+    auto img = cv::imread(input.string());
 
-    std::cout << "start process" << std::endl;
-    img_color = cpu::process_image(img_color);
+    img = blind::draw_traject(img);
 
-    std::cout << "read output" << std::endl;
-    const std::filesystem::path output(output_path);
-    std::cout << "write output" << std::endl;
-    cv::imwrite(output, img_color);
-    std::cout << "done" << std::endl;
+    cv::imwrite(output.string(), img);
 }
 
 void process_video(std::string video_path, std::string output_path)
@@ -56,7 +51,7 @@ void process_video(std::string video_path, std::string output_path)
     while (!img_color.empty())
     {
         std::cout << "processing frame: " << i << std::endl;
-        img_color = cpu::process_image(img_color);
+        img_color = blind::draw_traject(img_color);
 
         outputVideo << img_color;
 
@@ -107,8 +102,6 @@ int main(int argc, char *argv[])
     }
 
     if (process_mode == "image")
-    {
-        std::cout << "here" << std::endl;
         process_image(argv[2], argv[3]);
     }
     else if (process_mode == "video")
