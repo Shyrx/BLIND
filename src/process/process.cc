@@ -95,6 +95,10 @@ namespace blind
             }
             cv::Point mid =
                 cv::Point((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
+            if (red.x == 0 && red.y == 0)
+                mid = cv::Point(0, yellow.y);
+            if (yellow.x == 0 && yellow.y == 0)
+                mid = cv::Point(yellow_cones.cols, red.y);
             if (mid.x == 0 && mid.y == 0)
                 mid = cv::Point(yellow_cones.cols / 2, yellow_cones.rows / 2);
 
