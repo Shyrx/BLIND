@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <iostream>
 #include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
 #include <string>
 
 void process_image(std::string input_path, std::string output_path)
@@ -64,26 +65,59 @@ void process_video(std::string video_path, std::string output_path)
     }
 }
 
-int main(int argc, char *argv[])
+void capture_camera()
 {
-    if (argc != 4)
+    cv::Mat frame;
+    cv::VideoCapture cap;
+
+    cap.open(0, cv::CAP_V4L2);
+    if (!cap.isOpened())
     {
-        std::cerr << "Usage:\n"
-                  << "\t" << argv[0] << "image input output\n"
-                  << "\t" << argv[0] << "video input output\n";
-        return 1;
+        std::cerr << "Unable to open camera\n";
+        return;
     }
 
+    while (true)
+    {
+        cap.read(frame);
+        if (frame.empty())
+        {
+            std::cerr << "Blank frame, aborting\n";
+            return;
+        }
+
+        // faire du processing sur `frame` ici
+
+        if (cv::waitKey(5) >= 0)
+            break;
+    }
+}
+
+int main(int argc, char *argv[])
+{
     const std::string process_mode(argv[1]);
+
+    if (argc != 4 && process_mode != "camera")
+    {
+        std::cerr << "Usage:\n"
+                  << "\t" << argv[0] << " image input output\n"
+                  << "\t" << argv[0] << " video input output\n"
+                  << "\t" << argv[0] << " camera\n";
+        return 1;
+    }
 
     if (process_mode == "image")
     {
         std::cout << "here" << std::endl;
         process_image(argv[2], argv[3]);
     }
-    else
+    else if (process_mode == "video")
     {
         process_video(argv[2], argv[3]);
+    }
+    else if (process_mode == "camera")
+    {
+        capture_camera();
     }
 
     return 0;
