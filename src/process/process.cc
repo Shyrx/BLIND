@@ -112,10 +112,10 @@ namespace blind
         }
     } // namespace
 
-    cv::Scalar white_low = cv::Scalar(170, 150, 150);
-    cv::Scalar white_high = cv::Scalar(190, 255, 255);
+    cv::Scalar white_low = cv::Scalar(160, 100, 100);
+    cv::Scalar white_high = cv::Scalar(180, 255, 255);
 
-    cv::Scalar yellow_low = cv::Scalar(30, 100, 150);
+    cv::Scalar yellow_low = cv::Scalar(30, 100, 100);
     cv::Scalar yellow_high = cv::Scalar(50, 255, 255);
 
     cv::Mat draw_traject(cv::Mat &original)
