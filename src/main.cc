@@ -1,8 +1,8 @@
 #include <filesystem>
 #include <iostream>
+#include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
-#include <opencv2/highgui.hpp>
 #include <string>
 
 #include "process.hh"
@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
     }
 
     if (process_mode == "image")
+    {
         process_image(argv[2], argv[3]);
     }
     else if (process_mode == "video")
