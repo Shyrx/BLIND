@@ -4,6 +4,7 @@
 #include <opencv2/videoio.hpp>
 #include <stdexcept>
 
+#include "arg-parser.hh"
 #include "process.hh"
 #include "serial.hh"
 
@@ -105,29 +106,32 @@ int communicate_serial()
     return 0;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
-    const std::string process_mode(argv[1]);
+    blind::ArgParser parser(argc, argv);
+    parser.run();
 
-    if (argc != 4 && process_mode != "camera")
+    if (parser.error())
     {
-        std::cerr << "Usage:\n"
-                  << "\t" << argv[0] << " image input output\n"
-                  << "\t" << argv[0] << " video input output\n"
-                  << "\t" << argv[0] << " camera\n";
+        parser.print_error();
         return 1;
     }
+    if (parser.has("help"))
+    {
+        parser.print_help();
+        return 0;
+    }
 
-    if (process_mode == "image")
+    const auto mode = parser.get_mode();
+    switch (mode)
     {
-        process_image(argv[2], argv[3]);
-    }
-    else if (process_mode == "video")
-    {
-        process_video(argv[2], argv[3]);
-    }
-    else if (process_mode == "camera")
-    {
+    case blind::Mode::IMAGE:
+        process_image(parser.get_input(), parser.get_output());
+        break;
+    case blind::Mode::VIDEO:
+        process_video(parser.get_input(), parser.get_output());
+        break;
+    case blind::Mode::CAMERA:
         capture_camera();
     }
 
