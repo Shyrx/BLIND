@@ -77,38 +77,59 @@ namespace blind
             return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
         }
 
-        cv::Point getDirection(const cv::Point &base, const int nb_labels,
-                               cv::Mat &centroids, cv::Mat &yellow_cones)
+        cv::Point getMiddle(cv::Point &red, cv::Point &yellow, int max_cols,
+                            int max_rows)
         {
-            cv::Point red(0, 0);
-            cv::Point yellow(0, 0);
-            for (int i = 1; i < nb_labels; i++)
-            {
-                cv::Point p(centroids.at<double>(i, 0),
-                            centroids.at<double>(i, 1));
-                auto val = yellow_cones.at<unsigned char>(p);
-
-                if (val != 0)
-                {
-                    if (dist(base, yellow) > dist(base, p))
-                        yellow = p;
-                }
-                else
-                {
-                    if (dist(base, red) > dist(base, p))
-                        red = p;
-                }
-            }
             cv::Point mid =
                 cv::Point((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
             if (mid.x == 0 && mid.y == 0)
-                mid = cv::Point(yellow_cones.cols / 2, yellow_cones.rows / 2);
+                mid = cv::Point(max_cols / 2, max_rows / 2);
             else if (red.x == 0 && red.y == 0)
                 mid = cv::Point(0, yellow.y);
             else if (yellow.x == 0 && yellow.y == 0)
-                mid = cv::Point(yellow_cones.cols, red.y);
+                mid = cv::Point(max_cols, red.y);
 
             return mid;
+        }
+        cv::Point getDirection(const int nb_labels, cv::Mat &centroids,
+                               cv::Mat &yellow_cones, cv::Mat &stats)
+        {
+            cv::Point base(yellow_cones.cols / 2, yellow_cones.rows);
+            cv::Point red(0, 0);
+            int max_red_size = 0;
+            cv::Point yellow(0, 0);
+            int max_yellow_size = 0;
+            for (int i = 1; i < nb_labels; i++)
+            {
+                cv::Point curr_p(centroids.at<double>(i, 0),
+                                 centroids.at<double>(i, 1));
+                auto val = yellow_cones.at<unsigned char>(curr_p);
+                int size = stats.at<int>(i, cv::CC_STAT_AREA);
+
+                auto func = [&base, &curr_p, &size](int &max_size,
+                                                    cv::Point &p) {
+                    if (max_size < (size / 10 * 7)) // Prev too small
+                    {
+                        max_size = size;
+                        p = curr_p;
+                        return;
+                    }
+                    else if (size > max_size)
+                        max_size = size;
+                    else if (size < (max_size / 10 * 7)) // Too small
+                        return;
+
+                    if (dist(base, p) > dist(base, curr_p))
+                        p = curr_p;
+                };
+
+                if (val != 0)
+                    func(max_yellow_size, yellow);
+                else
+                    func(max_red_size, red);
+            }
+
+            return getMiddle(red, yellow, yellow_cones.cols, yellow_cones.rows);
         }
     } // namespace
 
@@ -135,7 +156,7 @@ namespace blind
             all_cones, labels, stats, centroids);
 
         cv::Point base(img.cols / 2, img.rows);
-        cv::Point mid = getDirection(base, nb_labels, centroids, yellow_cones);
+        cv::Point mid = getDirection(nb_labels, centroids, yellow_cones, stats);
 
         cvtColor(all_cones, all_cones, cv::COLOR_GRAY2BGR);
         cv::arrowedLine(all_cones, base, mid, cv::Scalar(255, 255, 255));
