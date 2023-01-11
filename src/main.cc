@@ -1,10 +1,8 @@
 #include <filesystem>
-#include <iostream>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
-#include <string>
-#include <unistd.h>
+#include <stdexcept>
 
 #include "process.hh"
 #include "serial.hh"
@@ -19,16 +17,14 @@ void process_image(const std::filesystem::path &input,
     cv::imwrite(output.string(), img);
 }
 
-void process_video(std::string video_path, std::string output_path)
+void process_video(const std::filesystem::path &input,
+                   const std::filesystem::path &output)
 {
-    const std::filesystem::path input_path(video_path);
-    cv::VideoCapture video(input_path);
+    cv::VideoCapture video(input);
 
     if (!video.isOpened())
-    {
-        std::cerr << "Could not open input video: " << video_path << std::endl;
-        exit(3);
-    }
+        throw std::runtime_error("could not open input video");
+
     cv::Mat img_bg_color;
     cv::Mat img_color;
 
@@ -37,16 +33,11 @@ void process_video(std::string video_path, std::string output_path)
                (int)video.get(cv::CAP_PROP_FRAME_HEIGHT));
 
     cv::VideoWriter outputVideo; // Open the output
-    outputVideo.open(output_path,
-                     static_cast<int>(video.get(cv::CAP_PROP_FOURCC)),
+    outputVideo.open(output, static_cast<int>(video.get(cv::CAP_PROP_FOURCC)),
                      video.get(cv::CAP_PROP_FPS),
                      cv::Size(img_bg_color.cols, img_bg_color.rows), true);
     if (!outputVideo.isOpened())
-    {
-        std::cerr << "Could not open the output video for write: "
-                  << output_path << std::endl;
-        exit(3);
-    }
+        throw std::runtime_error("could not open the output video for write");
 
     video >> img_color;
     int i = 1;
