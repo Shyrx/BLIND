@@ -20,4 +20,4 @@ add_subdirectory("src")
 
 add_executable(voir "src/main.cc")
 
-target_link_libraries(voir PRIVATE process)
+target_link_libraries(voir PRIVATE process serial)
