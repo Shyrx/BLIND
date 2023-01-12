@@ -77,11 +77,10 @@ namespace blind
             return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
         }
 
-        cv::Point getMiddle(cv::Point &red, cv::Point &yellow, int max_cols,
-                            int max_rows)
+        cv::Point getMiddle(const cv::Point &red, const cv::Point &yellow, int max_cols,
+                                            int max_rows)
         {
-            cv::Point mid =
-                cv::Point((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
+            cv::Point mid((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
             if (mid.x == 0 && mid.y == 0)
                 mid = cv::Point(max_cols / 2, max_rows / 2);
             else if (red.x == 0 && red.y == 0)
@@ -155,8 +154,8 @@ namespace blind
         const auto nb_labels = cv::connectedComponentsWithStats(
             all_cones, labels, stats, centroids);
 
-        cv::Point base(img.cols / 2, img.rows);
-        cv::Point mid = getDirection(nb_labels, centroids, yellow_cones, stats);
+        const cv::Point base(img.cols / 2, img.rows);
+        const auto mid = getDirection(nb_labels, centroids, yellow_cones, stats);
 
         cvtColor(all_cones, all_cones, cv::COLOR_GRAY2BGR);
         cv::arrowedLine(all_cones, base, mid, cv::Scalar(255, 255, 255));
