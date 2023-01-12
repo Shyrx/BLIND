@@ -4,8 +4,10 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <string>
+#include <unistd.h>
 
 #include "process.hh"
+#include "serial.hh"
 
 void process_image(const std::filesystem::path &input,
                    const std::filesystem::path &output)
@@ -86,6 +88,30 @@ void capture_camera()
         if (cv::waitKey(5) >= 0)
             break;
     }
+}
+
+int communicate_serial()
+{
+    serial::SerialCommunicator s;
+    int ret;
+
+    // alternate between sending 'L' and 'R' every 2 secs to serial
+    while (true)
+    {
+        ret = s.send('L');
+        if (ret != 0)
+            return ret;
+
+        sleep(2);
+
+        ret = s.send('R');
+        if (ret != 0)
+            return ret;
+
+        sleep(2);
+    }
+
+    return 0;
 }
 
 int main(int argc, char *argv[])
