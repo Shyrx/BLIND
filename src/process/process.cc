@@ -105,27 +105,27 @@ namespace blind
                 auto val = yellow_cones.at<unsigned char>(curr_p);
                 int size = stats.at<int>(i, cv::CC_STAT_AREA);
 
-                auto func = [&base, &curr_p, &size](int &max_size,
-                                                    cv::Point &p) {
-                    if (max_size < (size / 10 * 7)) // Prev too small
-                    {
-                        max_size = size;
-                        p = curr_p;
-                        return;
-                    }
-                    else if (size > max_size)
-                        max_size = size;
-                    else if (size < (max_size / 10 * 7)) // Too small
-                        return;
+                auto check_and_swap_cone =
+                    [&base, &curr_p, &size](int &max_size, cv::Point &p) {
+                        if (max_size < (size / 10 * 7)) // Prev too small
+                        {
+                            max_size = size;
+                            p = curr_p;
+                            return;
+                        }
+                        else if (size > max_size)
+                            max_size = size;
+                        else if (size < (max_size / 10 * 7)) // Curr too small
+                            return;
 
-                    if (dist(base, p) > dist(base, curr_p))
-                        p = curr_p;
-                };
+                        if (dist(base, p) > dist(base, curr_p))
+                            p = curr_p;
+                    };
 
                 if (val != 0)
-                    func(max_yellow_size, yellow);
+                    check_and_swap_cone(max_yellow_size, yellow);
                 else
-                    func(max_red_size, red);
+                    check_and_swap_cone(max_red_size, red);
             }
 
             return getMiddle(red, yellow, yellow_cones.cols, yellow_cones.rows);
