@@ -103,7 +103,7 @@ namespace blind
                 cv::Point curr_p(centroids.at<double>(i, 0),
                                  centroids.at<double>(i, 1));
                 auto val = yellow_cones.at<unsigned char>(curr_p);
-                int size = stats.at<int>(i, cv::CC_STAT_AREA);
+                auto size = stats.at<int>(i, cv::CC_STAT_AREA);
 
                 auto check_and_swap_cone =
                     [&base, &curr_p, &size](int &max_size, cv::Point &p) {
