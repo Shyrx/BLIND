@@ -24,3 +24,16 @@ Only areas which pixels are in those intervals are kept in the filtering result.
 After this step, yellow and red cones are isolated in separate matrix.
 Having the left and right cones in different matrix eases the process of deciding which recognized zone of interest belongs to which side of the road.
 
+### Step 2: noise removal
+
+Color filtering using the HSV domain can sometimes include undesired areas in the resulting matrix if their color is close to the one filtered.
+
+To compensate this behavior, opening and closing algorithms are applied.
+Their goal is to remove smalls and isolated areas in the filtered picture, with the supposition that those are either not cones, or cones that are far from the car.
+
+The opening process consists in performing an erosion and a dilation, and closing is the opposite.
+For opening, we use a kernel of size 16 pixels ; for closing, a kernel of size 30 pixels.
+Those kernel values have the advantage of keeping only wide areas of the filtered picture: the closing is more aggressive than the opening.
+
+A downside of having split right and left cones in the first step is that opening and closing has to be done twice.
+If this is performed on a merged matrix, their is a chance to not be able to retrieve the cone color after the third step.
