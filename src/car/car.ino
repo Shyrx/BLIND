@@ -1,5 +1,7 @@
 #include <Servo.h>
 
+Servo servo; // create servo object to control a servo
+
 int PIN = 13;
 
 int front = 92;
@@ -9,8 +11,6 @@ int forward = LOW;
 int backward = HIGH;
 int minSpd = 0;
 int maxSpd = 255;
-
-int receivedByte;
 
 void moveForward(int rotation)
 {
@@ -33,29 +33,65 @@ void turn(int degree)
     servo.write(degree);
 }
 
-void handleInput(char input) {
+void resetDir()
+{
+    servo.write(front);
+}
+
+void handleInput(char input)
+{
     Serial.write(input);
 }
 
-void setup() {
-  servo.attach(PIN);
-  pinMode(PIN, OUTPUT);
-  pinMode(dir, OUTPUT);
-  pinMode(spd, OUTPUT);
-  resetDir();
+void setup()
+{
+    servo.attach(PIN);
+    pinMode(PIN, OUTPUT);
+    pinMode(dir, OUTPUT);
+    pinMode(spd, OUTPUT);
+    resetDir();
 
-  Serial.begin(115200);
-  while (!Serial) {
-    ;
-  }
-  delay(300);
+    Serial.begin(115200);
+    while (!Serial)
+    {
+        ;
+    }
+    delay(300);
 }
 
-void loop() {
-  if (Serial.available() > 0) {
-    receivedByte = Serial.read();
-    handleInput(receivedByte);
-  }
+void resetString(char *angle, int nb)
+{
+    for (int i = 0; i < nb; i++)
+        angle[i] = 0;
+}
 
-  delay(50);
+int receivedByte = 0;
+bool negative = false;
+int i = 0;
+char angle[3] = { 0 };
+
+void loop()
+{
+    if (Serial.available() > 0)
+    {
+        receivedByte = Serial.read();
+        if (receivedByte == '-')
+        {
+            negative = true;
+        }
+        else if (receivedByte == '\n')
+        {
+            int sign = negative ? -1 : 1;
+            turn(sign * atoi(angle));
+            resetString(angle, 3);
+            i = 0;
+            negative = false;
+        }
+        else
+        {
+            angle[i++] = receivedByte;
+        }
+    }
+
+    delay(50);
 }
