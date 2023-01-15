@@ -31,20 +31,16 @@ belongs to which side of the road.
 
 Color filtering using the HSV domain can sometimes include undesired areas in the resulting matrix if their color is close to the one filtered.
 
-To compensate this behavior, morphological opening and closing algorithms are applied.
-Their goal is to remove smalls and isolated areas in the filtered picture using that they are either not cones or cones that are too far from the car
-to be considered.
+To compensate this behavior, opening and closing algorithms are applied.
+Their goal is to remove smalls and isolated areas in the filtered picture, with the supposition that those are either not cones, or cones that are far from the car.
 
-The opening process consists of performing a morphological dilation following a morphological erosion, and closing is the opposite.
-For the morphological opening, we use a kernel of size 16 pixels.
-For the morphological closing, we use a kernel of  30 pixels.
+The opening process consists in performing an erosion and a dilation, and closing is the opposite.
+For opening, we use a kernel of size 16 pixels ; for closing, a kernel of size 30 pixels.
+Those kernel values have the advantage of keeping only wide areas of the filtered picture: the closing is more aggressive than the opening.
 Because the closing is more aggressive than the opening, those kernel values have the advantage of keeping only wide areas of the filtered picture.
 
-A downside of having split right and left cones in the first step is that opening and closing have to be called twice.
-If this is performed on a merged matrix, there is a non-negligible chance to lose the cone color after the third step.
+A downside of having split right and left cones in the first step is that opening and closing has to be done twice.
+If this is performed on a merged matrix, their is a non-negligible chance to not be able to retrieve the cone color after isolating the closest one.
 
-## Step 3: Cone matching
+### Step 3: detection of connected components
 
-## Step 4: Angle computation
-
-## Demo
