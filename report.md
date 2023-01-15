@@ -44,3 +44,10 @@ If this is performed on a merged matrix, their is a non-negligible chance to not
 
 ### Step 3: detection of connected components
 
+The previous steps result in two matrix: one with red and the other with yellow cones.
+Only the biggest areas have been kept. Those are supposedly cones that are the closest to the car.
+
+First those two matrix are merged in order to run the following algorithm only once.
+
+On this matrix, a connected components algorithm is performed.
+Resulting blobs are then analyzed. For each one, 
