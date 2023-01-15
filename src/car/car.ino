@@ -83,7 +83,7 @@ void loop()
         else if (receivedByte == '\n')
         {
             int sign = negative ? -1 : 1;
-            turn(sign * atoi(angle));
+            turn(front + sign * atoi(angle));
             resetString(angle, 3);
             i = 0;
             negative = false;
