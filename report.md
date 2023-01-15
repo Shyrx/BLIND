@@ -45,4 +45,8 @@ After the previous steps, two matrices are obtained: one with red cones and an o
 Only the biggest areas have been kept, those are cones that are supposed to be the closest to the car.
 
 First those two matrix needs to be merged in order to run the following algorithm only once.
-Once this is done, we run a connected component detection algorithm to retrieve the blobs. For each one of them, 
+Once this is done, we run a connected component detection algorithm to retrieve the blobs.
+For each one of them, from their center pixel is retrieved their color.
+This iteration aims at computing the lowest component for red and for yellow cones on the Y axis.
+After those points are found, their center is returned. This should be the direction of the car.
+
