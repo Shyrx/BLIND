@@ -50,3 +50,12 @@ For each one of them, from their center pixel is retrieved their color.
 This iteration aims at computing the lowest component for red and for yellow cones on the Y axis.
 After those points are found, their center is returned. This should be the direction of the car.
 
+## Serial communication
+
+The Raspberry Pi is supposed to communicate its decisions with the Arduino card.
+It achieves the former through its GPIO ports. In the code, the `libpigpio` has been used.
+
+## Testing
+
+The algorithm has been tested on given samples.
+The program provides a visualization of the results consisting of a black and white view of retained components, together with an arrow indicating the selected direction.
