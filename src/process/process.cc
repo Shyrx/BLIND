@@ -8,14 +8,13 @@
 #include <opencv2/core/types.hpp>
 #include <opencv2/imgproc.hpp>
 
-#define PI 3.14159265358979323846
-
 namespace blind
 {
     namespace
     {
         constexpr const auto closing_kern_size = 30;
         constexpr const auto opening_kern_size = 16;
+        constexpr const auto pi = 3.14159265358979323846;
 
         void closing(cv::Mat &mat)
         {
@@ -135,7 +134,7 @@ namespace blind
 
         float compute_angle(const cv::Point &base, const cv::Point &dir)
         {
-            return std::atan2(dir.y - base.y, dir.x - base.x) * 180 / PI + 90;
+            return std::atan2(dir.y - base.y, dir.x - base.x) * 180 / pi + 90;
         }
 
     } // namespace
