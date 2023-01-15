@@ -8,6 +8,8 @@
 #include <opencv2/core/types.hpp>
 #include <opencv2/imgproc.hpp>
 
+#define PI 3.14159265358979323846
+
 namespace blind
 {
     namespace
@@ -77,8 +79,8 @@ namespace blind
             return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
         }
 
-        cv::Point getMiddle(const cv::Point &red, const cv::Point &yellow, int max_cols,
-                                            int max_rows)
+        cv::Point getMiddle(const cv::Point &red, const cv::Point &yellow,
+                            int max_cols, int max_rows)
         {
             cv::Point mid((red.x + yellow.x) / 2, (red.y + yellow.y) / 2);
             if (mid.x == 0 && mid.y == 0)
@@ -130,6 +132,12 @@ namespace blind
 
             return getMiddle(red, yellow, yellow_cones.cols, yellow_cones.rows);
         }
+
+        float compute_angle(const cv::Point &base, const cv::Point &dir)
+        {
+            return std::atan2(dir.y - base.y, dir.x - base.x) * 180 / PI + 90;
+        }
+
     } // namespace
 
     cv::Scalar white_low = cv::Scalar(160, 100, 100);
@@ -155,14 +163,36 @@ namespace blind
             all_cones, labels, stats, centroids);
 
         const cv::Point base(img.cols / 2, img.rows);
-        const auto mid = getDirection(nb_labels, centroids, yellow_cones, stats);
+        const auto mid =
+            getDirection(nb_labels, centroids, yellow_cones, stats);
 
         cvtColor(all_cones, all_cones, cv::COLOR_GRAY2BGR);
-        cv::arrowedLine(all_cones, base, mid, cv::Scalar(255, 255, 255));
+        cv::arrowedLine(original, base, mid, cv::Scalar(255, 255, 255));
 
-        return all_cones;
+        return original;
 
         // 3 - Match cones together
         // 4 - Draw traject
+    }
+
+    int get_angle(cv::Mat &img)
+    {
+        cvtColor(img, img, cv::COLOR_BGR2HSV);
+        cv::Mat yellow_cones = filterOnColor(img, yellow_low, yellow_high);
+        remove_noise(yellow_cones);
+        cv::Mat red_cones = filterOnColor(img, white_low, white_high);
+        remove_noise(red_cones);
+
+        cv::Mat all_cones = fuseMat(red_cones, yellow_cones);
+
+        cv::Mat labels, stats, centroids;
+        const auto nb_labels = cv::connectedComponentsWithStats(
+            all_cones, labels, stats, centroids);
+
+        const cv::Point base(img.cols / 2, img.rows);
+        const auto mid =
+            getDirection(nb_labels, centroids, yellow_cones, stats);
+
+        return compute_angle(base, mid);
     }
 } // namespace blind

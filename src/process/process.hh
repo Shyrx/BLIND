@@ -5,4 +5,5 @@
 namespace blind
 {
     cv::Mat draw_traject(cv::Mat &img);
-} // namespace op
+    int get_angle(cv::Mat &img);
+} // namespace blind
