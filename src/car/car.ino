@@ -57,6 +57,7 @@ void setup()
         ;
     }
     delay(300);
+    moveForward(150);
 }
 
 void resetString(char *angle, int nb)
