@@ -166,13 +166,9 @@ namespace blind
         const auto mid =
             getDirection(nb_labels, centroids, yellow_cones, stats);
 
-        cvtColor(all_cones, all_cones, cv::COLOR_GRAY2BGR);
         cv::arrowedLine(original, base, mid, cv::Scalar(255, 255, 255));
 
         return original;
-
-        // 3 - Match cones together
-        // 4 - Draw traject
     }
 
     int get_angle(cv::Mat &img)
