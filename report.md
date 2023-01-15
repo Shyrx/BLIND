@@ -24,30 +24,25 @@ Arbitrary values are used to detect yellow and red pixels in the camera snapshot
 Only areas which pixels are in those intervals are kept in the filtering result.
 
 After this step, yellow and red cones are isolated for better processing.
-Having them in different matrices eases the cost of deciding which recognized zones of interest
-belongs to which side of the road.
+Having them in different matrices eases the cost of deciding which recognized zones of interest belongs to which side of the road.
 
 ### Step 2: noise removal
 
 Color filtering using the HSV domain can sometimes include undesired areas in the resulting matrix if their color is close to the one filtered.
 
 To compensate this behavior, opening and closing algorithms are applied.
-Their goal is to remove smalls and isolated areas in the filtered picture, with the supposition that those are either not cones, or cones that are far from the car.
+Their goal is to remove small and isolated areas in the filtered picture, with the supposition that those are either not cones, or cones that are far from the car.
 
-The opening process consists in performing an erosion and a dilation, and closing is the opposite.
-For opening, we use a kernel of size 16 pixels ; for closing, a kernel of size 30 pixels.
-Those kernel values have the advantage of keeping only wide areas of the filtered picture: the closing is more aggressive than the opening.
-Because the closing is more aggressive than the opening, those kernel values have the advantage of keeping only wide areas of the filtered picture.
+The opening process consists of performing a morphological dilation following a morphological erosion, and closing is the opposite.
+In order to keep only wide areas of the filtered picture, a bigger kernel size have been chosen for closing than for opening.
 
-A downside of having split right and left cones in the first step is that opening and closing has to be done twice.
-If this is performed on a merged matrix, their is a non-negligible chance to not be able to retrieve the cone color after isolating the closest one.
+A downside of having split right and left cones from the first step is that opening and closing have to be called twice.
+If this is performed on a merged matrix, there is a non-negligible chance to not be able to retrieve the cone color after the third step.
 
 ### Step 3: detection of connected components
 
-The previous steps result in two matrix: one with red and the other with yellow cones.
-Only the biggest areas have been kept. Those are supposedly cones that are the closest to the car.
+After the previous steps, two matrices are obtained: one with red cones and an other one with the yellow ones.
+Only the biggest areas have been kept, those are cones that are supposed to be the closest to the car.
 
-First those two matrix are merged in order to run the following algorithm only once.
-
-On this matrix, a connected components algorithm is performed.
-Resulting blobs are then analyzed. For each one, 
+First those two matrix needs to be merged in order to run the following algorithm only once.
+Once this is done, we run a connected component detection algorithm to retrieve the blobs. For each one of them, 
