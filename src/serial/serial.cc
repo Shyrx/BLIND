@@ -1,6 +1,7 @@
-#include <pigpio.h>
-#include <iostream>
 #include "serial.hh"
+
+#include <iostream>
+#include <pigpio.h>
 
 namespace serial
 {
@@ -14,7 +15,7 @@ namespace serial
             return;
         }
 
-        ret = serOpen("/dev/ttyAMA0", 115200, 0);
+        ret = serOpen((char *)"/dev/ttyAMA0", 115200, 0);
         if (ret < 0)
         {
             gpioTerminate();
@@ -34,4 +35,4 @@ namespace serial
     {
         return serWriteByte(handle_, data);
     }
-}
+} // namespace serial
