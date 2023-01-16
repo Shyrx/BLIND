@@ -80,6 +80,12 @@ void capture_camera()
             continue;
 
         int angle = blind::get_angle(frame);
+        if (angle == blind::no_angle)
+        {
+            s.send('s');
+            return;
+        }
+
         for (const char c : std::to_string(angle))
             s.send(c);
         s.send('\n');

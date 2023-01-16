@@ -90,6 +90,7 @@ namespace blind
 
             return mid;
         }
+
         cv::Point getDirection(const int nb_labels, cv::Mat &centroids,
                                cv::Mat &yellow_cones, cv::Mat &stats)
         {
@@ -167,11 +168,14 @@ namespace blind
         const auto nb_labels = cv::connectedComponentsWithStats(
             all_cones, labels, stats, centroids);
 
-        const cv::Point base(img.cols / 2, img.rows);
-        const auto mid =
-            getDirection(nb_labels, centroids, yellow_cones, stats);
+        if (nb_labels > 1)
+        {
+            const cv::Point base(img.cols / 2, img.rows);
+            const auto mid =
+                getDirection(nb_labels, centroids, yellow_cones, stats);
 
-        cv::arrowedLine(original, base, mid, cv::Scalar(255, 255, 255));
+            cv::arrowedLine(original, base, mid, cv::Scalar(255, 255, 255));
+        }
 
         return original;
     }
@@ -189,6 +193,9 @@ namespace blind
         cv::Mat labels, stats, centroids;
         const auto nb_labels = cv::connectedComponentsWithStats(
             all_cones, labels, stats, centroids);
+
+        if (nb_labels <= 1)
+            return no_angle;
 
         const cv::Point base(img.cols / 2, img.rows);
         const auto mid =

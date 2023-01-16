@@ -76,6 +76,9 @@ int reading = false;
 void loop()
 {
     receivedByte = Serial.read();
+    if (receivedByte == 's')
+        exit(0);
+
     if (receivedByte == '-')
     {
         negative = true;
