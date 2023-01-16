@@ -105,6 +105,13 @@ namespace blind
                 auto val = yellow_cones.at<unsigned char>(curr_p);
                 auto size = stats.at<int>(i, cv::CC_STAT_AREA);
 
+                int row = stats.at<int>(i, cv::CC_STAT_TOP)
+                    + stats.at<int>(i, cv::CC_STAT_HEIGHT);
+                int col = stats.at<int>(i, cv::CC_STAT_LEFT)
+                    + (val != 0 ? 0 : cv::CC_STAT_WIDTH);
+
+                curr_p = cv::Point(col, row);
+
                 auto check_and_swap_cone =
                     [&base, &curr_p, &size](int &max_size, cv::Point &p) {
                         if (max_size < (size / 10 * 7)) // Prev too small
