@@ -57,7 +57,7 @@ void setup()
         ;
     }
     delay(300);
-    moveForward(150);
+    moveForward(170);
 }
 
 int receivedByte = 0;
