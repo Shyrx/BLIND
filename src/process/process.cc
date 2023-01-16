@@ -106,7 +106,7 @@ namespace blind
                 auto size = stats.at<int>(i, cv::CC_STAT_AREA);
 
                 int row = stats.at<int>(i, cv::CC_STAT_TOP)
-                    + stats.at<int>(i, cv::CC_STAT_HEIGHT);
+                    + stats.at<int>(i, cv::CC_STAT_HEIGHT) / 2;
                 int col = stats.at<int>(i, cv::CC_STAT_LEFT)
                     + (val != 0 ? 0 : cv::CC_STAT_WIDTH);
 
