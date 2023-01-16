@@ -12,6 +12,8 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wvla")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address")
 
+add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
+
 find_package(OpenCV REQUIRED)
 link_libraries($<$<CONFIG:Debug>:-fsanitize=address> ${OpenCV_LIBS})
 include_directories(${OpenCV_INCLUDE_DIRS})

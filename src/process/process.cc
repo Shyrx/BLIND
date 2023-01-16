@@ -31,6 +31,7 @@ namespace blind
             cv::dilate(mat, mat, kernel);
         }
 
+#ifdef DEBUG
         cv::Mat draw_boxes(const cv::Mat &img, const cv::Mat &components,
                            int nb_components)
         {
@@ -51,6 +52,7 @@ namespace blind
 
             return out;
         }
+#endif
 
         cv::Mat filterOnColor(cv::Mat &img, cv::Scalar &low, cv::Scalar &high)
         {
