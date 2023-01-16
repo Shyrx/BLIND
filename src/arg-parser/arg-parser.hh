@@ -58,11 +58,6 @@ namespace blind
             return vm_["output"].as<std::string>();
         }
 
-        int get_inverval() const
-        {
-            return vm_["interval"].as<int>();
-        }
-
         bool has(const std::string &name) const
         {
             return vm_.contains(name);

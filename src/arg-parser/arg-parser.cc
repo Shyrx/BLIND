@@ -15,9 +15,7 @@ namespace blind
             ("input,i", po::value<std::string>()->value_name("path"),
                         "path to the input image or video")
             ("output,o", po::value<std::string>()->value_name("path"),
-                        "path to the output image or video")
-            ("interval,t", po::value<int>()->value_name("time"),
-                           "time between each iteration of results")
+                         "path to the output image or video")
             ;
         // clang-format on
 
