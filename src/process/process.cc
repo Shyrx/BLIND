@@ -3,9 +3,6 @@
 #include <cmath>
 #include <iostream>
 #include <opencv2/core.hpp>
-#include <opencv2/core/hal/interface.h>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/core/types.hpp>
 #include <opencv2/imgproc.hpp>
 
 namespace blind
