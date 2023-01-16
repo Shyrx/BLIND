@@ -1,9 +1,10 @@
 #include <filesystem>
+#include <iostream>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <stdexcept>
-#include <iostream>
+#include <unistd.h>
 
 #include "arg-parser.hh"
 #include "process.hh"
@@ -75,6 +76,8 @@ void capture_camera()
         for (const char c : std::to_string(angle))
             s.send(c);
         s.send('\n');
+
+        usleep(5000);
     }
 }
 
