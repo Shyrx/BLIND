@@ -48,6 +48,7 @@
               cmake-language-server
               opencv
               arduino
+              arduino-cli
               python310
               boost
             ] ++ [ pigpio ];
