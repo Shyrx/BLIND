@@ -58,6 +58,7 @@ void capture_camera()
 {
     cv::Mat frame;
     cv::VideoCapture cap;
+    serial::SerialCommunicator s;
 
     cap.open(0, cv::CAP_V4L2);
     if (!cap.isOpened())
@@ -75,10 +76,13 @@ void capture_camera()
             return;
         }
 
-        // faire du processing sur `frame` ici
+        int angle = blind::get_angle(frame);
+        for (const char c : std::to_string(angle))
+            s.send(c);
+        s.send('\n');
 
-        if (cv::waitKey(5) >= 0)
-            break;
+        // if (cv::waitKey(5) >= 0)
+        // break;
     }
 }
 
