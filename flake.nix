@@ -49,6 +49,7 @@
               opencv
               arduino
               python310
+              boost
             ] ++ [ pigpio ];
           };
     };
