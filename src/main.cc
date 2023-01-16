@@ -68,6 +68,8 @@ void capture_camera(int interval)
     if (!cap.isOpened())
         throw std::runtime_error("unable to open camera");
 
+    std::cout << "Starting recording\n";
+
     while (true)
     {
         cap.read(frame);
