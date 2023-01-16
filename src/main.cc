@@ -56,7 +56,7 @@ void process_video(const std::filesystem::path &input,
     }
 }
 
-void capture_camera()
+void capture_camera(int interval)
 {
     cv::Mat frame;
     cv::VideoCapture cap;
@@ -77,7 +77,7 @@ void capture_camera()
             s.send(c);
         s.send('\n');
 
-        usleep(5000);
+        usleep(interval);
     }
 }
 
@@ -130,7 +130,7 @@ int main(int argc, const char *argv[])
         process_video(parser.get_input(), parser.get_output());
         break;
     case blind::Mode::CAMERA:
-        capture_camera();
+        capture_camera(parser.get_inverval());
     }
 
     return 0;

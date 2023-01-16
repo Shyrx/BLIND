@@ -16,7 +16,8 @@ namespace blind
                         "path to the input image or video")
             ("output,o", po::value<std::string>()->value_name("path"),
                         "path to the output image or video")
-
+            ("interval,t", po::value<int>()->value_name("time"),
+                        "time between each iteration of results")
             ;
         // clang-format on
 
@@ -58,9 +59,7 @@ namespace blind
             mode_ = mode == "image" ? Mode::IMAGE : Mode::VIDEO;
 
             if (!vm_.contains("input") or !vm_.contains("output"))
-                error_ =
-                    "missing required argument 'input' or/and 'output'";
-
+                error_ = "missing required argument 'input' or/and 'output'";
         }
     }
 } // namespace blind
