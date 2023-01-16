@@ -3,6 +3,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <stdexcept>
+#include <iostream>
 
 #include "arg-parser.hh"
 #include "process.hh"
@@ -62,27 +63,18 @@ void capture_camera()
 
     cap.open(0, cv::CAP_V4L2);
     if (!cap.isOpened())
-    {
-        std::cerr << "Unable to open camera\n";
-        return;
-    }
+        throw std::runtime_error("unable to open camera");
 
     while (true)
     {
         cap.read(frame);
         if (frame.empty())
-        {
-            std::cerr << "Blank frame, aborting\n";
-            return;
-        }
+            throw std::runtime_error("blank frame, aborting");
 
         int angle = blind::get_angle(frame);
         for (const char c : std::to_string(angle))
             s.send(c);
         s.send('\n');
-
-        // if (cv::waitKey(5) >= 0)
-        // break;
     }
 }
 
@@ -91,7 +83,6 @@ int communicate_serial()
     serial::SerialCommunicator s;
     int ret;
 
-    // alternate between sending 'L' and 'R' every 2 secs to serial
     while (true)
     {
         ret = s.send('L');
