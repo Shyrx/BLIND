@@ -17,6 +17,7 @@ link_libraries($<$<CONFIG:Debug>:-fsanitize=address> ${OpenCV_LIBS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_subdirectory("src")
+add_subdirectory("report")
 
 add_executable(voir "src/main.cc")
 target_link_libraries(voir PRIVATE process serial argparser)
