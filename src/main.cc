@@ -78,12 +78,13 @@ void capture_camera(int interval)
 
         if (s.read() != 'c')
             continue;
+
         int angle = blind::get_angle(frame);
         for (const char c : std::to_string(angle))
             s.send(c);
         s.send('\n');
 
-        cv::imwrite("./output" + fmt::format("{:05}", i) + ".jpg", frame);
+        cv::imwrite("./output" + fmt::format("{:05}", i++) + ".jpg", frame);
     }
 }
 
