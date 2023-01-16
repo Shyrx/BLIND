@@ -194,6 +194,7 @@ namespace blind
         const auto mid =
             getDirection(nb_labels, centroids, yellow_cones, stats);
 
+        img = all_cones;
         cv::arrowedLine(img, base, mid, cv::Scalar(255, 255, 255));
 
         return compute_angle(base, mid);
