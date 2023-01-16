@@ -70,13 +70,12 @@ void capture_camera(int interval)
 
     while (true)
     {
-        if (s.read() != 'c')
-            continue;
-
         cap.read(frame);
         if (frame.empty())
             throw std::runtime_error("blank frame, aborting");
 
+        if (s.read() != 'c')
+            continue;
         int angle = blind::get_angle(frame);
         for (const char c : std::to_string(angle))
             s.send(c);
