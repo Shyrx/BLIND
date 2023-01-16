@@ -1,9 +1,37 @@
-# VOIR
+---
+title: "Handout VOIR"
+author:
+    - antoine.sole
+    - david.horozian
+    - thomas.crambert
+    - tristan.floch
+colortheme: "beaver"
+fonttheme: "professionalfonts"
+theme: "Frankfurt"
+fontsize: 12pt
+linkstyle: bold
+aspectratio: 169
+urlcolor: blue
+language: en-US
+indent: true
+colorlinks: true
+geometry: margin=2cm
+geometry: a4paper
+section-titles: true
+titlecolor: red
+header-includes:
+ - \usepackage{fvextra}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+ - \setlength{\parindent}{0pt}
+ - \usepackage[pipeTables=true]{markdown}
+ - \usepackage{titlesec}
+ - \titleformat{\section}{\large\bfseries}{\thesection}{1em}{\hrule}
+---
 
 This project is a program that performs video analysis of a delimited trajectory for a car replica.
 The algorithm runs on a Raspberry Pi, and communicates with an Arduino card that handles the robotic logic.
 
-The trajectory is made of pairs of plastic cones: red cones are located on the left, and yellow cones on the right 
+The trajectory is made of pairs of plastic cones: red cones are located on the left, and yellow cones on the right
 side of the road.
 
 The algorithm relies heavily on the OpenCV library.
