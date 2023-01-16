@@ -86,4 +86,4 @@ It achieves the former through its GPIO ports. In the code, the `libpigpio` has 
 ## Testing
 
 The algorithm has been tested on given samples.
-The program provides a visualization of the results consisting of a black and white view of retained components, together with an arrow indicating the selected direction.
+The program provides a visualization of the results consisting of an arrow that indicated the selected direction, superposed on the initial image or video.
