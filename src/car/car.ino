@@ -73,29 +73,26 @@ void resetString(char *str, int nb)
 
 void loop()
 {
-    if (Serial.available() > 0)
+    receivedByte = Serial.read();
+    if (receivedByte == '-')
     {
-        receivedByte = Serial.read();
-        Serial.write(':');
-        Serial.write(receivedByte);
-        Serial.write('\n');
-        if (receivedByte == '-')
-        {
-            negative = true;
-        }
-        else if (receivedByte == '\n')
-        {
-            int sign = negative ? -1 : 1;
-            turn(front + sign * atoi(angle));
-            resetString(angle, 3);
-            i = 0;
-            negative = false;
-        }
-        else
-        {
-            angle[i++] = receivedByte;
-        }
+        negative = true;
     }
-
-    delay(100);
+    else if (receivedByte == '\n')
+    {
+        int sign = negative ? -1 : 1;
+        turn(front + sign * atoi(angle));
+        resetString(angle, 3);
+        i = 0;
+        negative = false;
+    }
+    else if ('0' <= receivedByte && receivedByte <= '9')
+    {
+        angle[i++] = receivedByte;
+    }
+    else
+    {
+        Serial.write('c');
+        delay(50);
+    }
 }
