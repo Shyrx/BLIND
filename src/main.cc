@@ -69,6 +69,9 @@ void capture_camera(int interval)
 
     while (true)
     {
+        if (s.read() != 'c')
+            continue;
+
         cap.read(frame);
         if (frame.empty())
             throw std::runtime_error("blank frame, aborting");
@@ -81,32 +84,7 @@ void capture_camera(int interval)
         std::stringstream ss;
         ss << std::setw(5) << std::setfill('0') << i++;
         cv::imwrite("./output" + ss.str() + ".jpg", frame);
-
-        usleep(interval);
     }
-}
-
-int communicate_serial()
-{
-    serial::SerialCommunicator s;
-    int ret;
-
-    while (true)
-    {
-        ret = s.send('L');
-        if (ret != 0)
-            return ret;
-
-        sleep(2);
-
-        ret = s.send('R');
-        if (ret != 0)
-            return ret;
-
-        sleep(2);
-    }
-
-    return 0;
 }
 
 int main(int argc, const char *argv[])

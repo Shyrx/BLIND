@@ -35,4 +35,9 @@ namespace serial
     {
         return serWriteByte(handle_, data);
     }
+
+    int SerialCommunicator::read() const
+    {
+        return serReadByte(handle_);
+    }
 } // namespace serial

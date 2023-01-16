@@ -11,5 +11,6 @@ namespace serial
         SerialCommunicator();
         ~SerialCommunicator();
         int send(const char data) const;
+        int read() const;
     };
-}
+} // namespace serial
