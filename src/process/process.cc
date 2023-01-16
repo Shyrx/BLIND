@@ -187,6 +187,8 @@ namespace blind
         const auto mid =
             getDirection(nb_labels, centroids, yellow_cones, stats);
 
+        img = all_cones;
+
         return compute_angle(base, mid);
     }
 } // namespace blind

@@ -76,6 +76,9 @@ void loop()
     if (Serial.available() > 0)
     {
         receivedByte = Serial.read();
+        Serial.write(':');
+        Serial.write(receivedByte);
+        Serial.write('\n');
         if (receivedByte == '-')
         {
             negative = true;
@@ -93,4 +96,6 @@ void loop()
             angle[i++] = receivedByte;
         }
     }
+
+    delay(100);
 }

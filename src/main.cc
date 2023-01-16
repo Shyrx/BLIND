@@ -61,6 +61,7 @@ void capture_camera(int interval)
     cv::Mat frame;
     cv::VideoCapture cap;
     serial::SerialCommunicator s;
+    int i = 0;
 
     cap.open(0, cv::CAP_V4L2);
     if (!cap.isOpened())
@@ -76,6 +77,8 @@ void capture_camera(int interval)
         for (const char c : std::to_string(angle))
             s.send(c);
         s.send('\n');
+
+        cv::imwrite("./output" + std::to_string(i++) + ".jpg", frame);
 
         usleep(interval);
     }
