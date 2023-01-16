@@ -71,6 +71,8 @@ void resetString(char *str, int nb)
         str[j] = 0;
 }
 
+int reading = false;
+
 void loop()
 {
     receivedByte = Serial.read();
@@ -85,14 +87,15 @@ void loop()
         resetString(angle, 3);
         i = 0;
         negative = false;
+        reading = false;
     }
     else if ('0' <= receivedByte && receivedByte <= '9')
     {
         angle[i++] = receivedByte;
     }
-    else
+    else if (!reading)
     {
         Serial.write('c');
-        delay(50);
+        reading = true;
     }
 }
