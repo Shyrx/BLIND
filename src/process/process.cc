@@ -141,8 +141,8 @@ namespace blind
     cv::Scalar white_low = cv::Scalar(160, 100, 100);
     cv::Scalar white_high = cv::Scalar(180, 255, 255);
 
-    cv::Scalar yellow_low = cv::Scalar(30, 100, 100);
-    cv::Scalar yellow_high = cv::Scalar(50, 255, 255);
+    cv::Scalar yellow_low = cv::Scalar(20, 100, 100);
+    cv::Scalar yellow_high = cv::Scalar(40, 255, 255);
 
     cv::Mat draw_traject(cv::Mat &original)
     {
