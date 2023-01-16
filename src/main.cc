@@ -46,7 +46,7 @@ void process_video(const std::filesystem::path &input,
     int i = 1;
     while (!img_color.empty())
     {
-        std::cout << "processing frame: " << i << std::endl;
+        std::cout << "processing frame: " << i++ << std::endl;
         img_color = blind::draw_traject(img_color);
 
         outputVideo << img_color;
@@ -79,7 +79,7 @@ void capture_camera(int interval)
         s.send('\n');
 
         std::stringstream ss;
-        ss << std::setw(5) << std::setfill('0') << i;
+        ss << std::setw(5) << std::setfill('0') << i++;
         cv::imwrite("./output" + ss.str() + ".jpg", frame);
 
         usleep(interval);
