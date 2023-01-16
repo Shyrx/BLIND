@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <fmt/core.h>
 #include <iostream>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -81,9 +82,7 @@ void capture_camera(int interval)
             s.send(c);
         s.send('\n');
 
-        std::stringstream ss;
-        ss << std::setw(5) << std::setfill('0') << i++;
-        cv::imwrite("./output" + ss.str() + ".jpg", frame);
+        cv::imwrite("./output" + fmt::format("{:05}", i) + ".jpg", frame);
     }
 }
 

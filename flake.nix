@@ -51,6 +51,7 @@
               arduino-cli
               python310
               boost
+              fmt
             ] ++ [ pigpio ];
           };
     };

@@ -14,6 +14,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address")
 
 add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
 
+find_package(fmt REQUIRED)
+link_libraries(fmt::fmt)
+
 find_package(OpenCV REQUIRED)
 link_libraries($<$<CONFIG:Debug>:-fsanitize=address> ${OpenCV_LIBS})
 include_directories(${OpenCV_INCLUDE_DIRS})
