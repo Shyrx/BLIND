@@ -60,16 +60,16 @@ void setup()
     moveForward(150);
 }
 
-void resetString(char *angle, int nb)
-{
-    for (int i = 0; i < nb; i++)
-        angle[i] = 0;
-}
-
 int receivedByte = 0;
 bool negative = false;
 int i = 0;
 char angle[3] = { 0 };
+
+void resetString(char *str, int nb)
+{
+    for (int j = 0; j < nb; j++)
+        str[j] = 0;
+}
 
 void loop()
 {
@@ -93,6 +93,4 @@ void loop()
             angle[i++] = receivedByte;
         }
     }
-
-    delay(50);
 }
