@@ -83,6 +83,9 @@ After those points are found, their center is returned. This should be the direc
 The Raspberry Pi is supposed to communicate its decisions with the Arduino card.
 It achieves the former through its GPIO ports. In the code, the `libpigpio` has been used.
 
+A simple protocol was put in place: the Raspberry Pi program writes each digit of the angle, including the optional minus sign, followed by a newline character.
+When the Arduino card receives the newline character, it parses back the angle.
+
 ## Testing
 
 The algorithm has been tested on given samples.
