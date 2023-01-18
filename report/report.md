@@ -53,7 +53,7 @@ Arbitrary values are used to detect yellow and red pixels in the camera snapshot
 Only areas whose pixels are in these intervals are kept in the filtering result.
 
 After this step, yellow and red cones are isolated for better processing.
-Having them in different matrices eases the cost of deciding which recognized zones of interest belongs to which side of the road.
+Having them in different matrices eases the cost of deciding which side of the road a recognized zone of interest belongs to.
 
 ### Step 2: noise removal
 
