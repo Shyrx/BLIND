@@ -38,9 +38,10 @@ The algorithm relies heavily on the OpenCV library.
 
 ## Video recognition
 
-Using OpenCV, the following algorithm is run on snapshot of the camera input taken on a given interval.
-Processing each frame would bring poor performances and would also not be useful since the result end result
-on the robotic side would be the same.
+Using OpenCV, the program captures snapshots of the camera input at a fixed interval, and feeds them
+to the algorithm described below. Snapshots are not taken for every frame of the video input, as that would
+hinder performances and be useless for the robotic side, which would not be able to process these inputs in
+time.
 
 ### Step 1: identification of the cones
 
