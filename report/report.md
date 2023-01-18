@@ -60,7 +60,7 @@ Having them in different matrices eases the cost of deciding which recognized zo
 Color filtering using the HSV domain can sometimes include undesired areas in the resulting matrix if their color is close to the one filtered.
 
 To compensate this behavior, opening and closing algorithms are applied.
-Their goal is to remove small and isolated areas in the filtered picture, with the supposition that those are either not cones, or cones that are far from the car.
+Their goal is to remove small and isolated areas in the filtered picture, with the supposition that they are either not cones, or cones that are too far away from the car.
 
 The opening process consists of performing a morphological dilation following a morphological erosion, and closing is the opposite.
 In order to keep only wide areas of the filtered picture, a bigger kernel size have been chosen for closing than for opening.
