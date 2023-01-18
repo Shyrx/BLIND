@@ -71,7 +71,7 @@ If this is performed on a merged matrix, there is a non-negligible chance to not
 ### Step 3: detection of connected components
 
 After the previous steps, two matrices are obtained: one with red cones and an other one with the yellow ones.
-Only the biggest areas have been kept, those are cones that are supposed to be the closest to the car.
+Only the biggest areas have been kept, which correspond to the cones that are supposed to be the closest to the car.
 
 First those two matrix needs to be merged in order to run the following algorithm only once.
 Once this is done, we run a connected component detection algorithm to retrieve the blobs.
