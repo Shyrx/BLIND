@@ -50,7 +50,7 @@ This allows for better isolation of cones.
 Arbitrary values are used to detect yellow and red pixels in the camera snapshot:
 - Yellow: between HSV(30, 100, 100) and HSV(50, 255, 255)
 - Red (appears white in HSV): between HSV(160, 100, 100) and HSV(180, 255, 255)
-Only areas which pixels are in those intervals are kept in the filtering result.
+Only areas whose pixels are in these intervals are kept in the filtering result.
 
 After this step, yellow and red cones are isolated for better processing.
 Having them in different matrices eases the cost of deciding which recognized zones of interest belongs to which side of the road.
