@@ -73,19 +73,39 @@ If this is performed on a merged matrix, there is a non-negligible chance to not
 After the previous steps, two matrices are obtained: one with red cones and an other one with the yellow ones.
 Only the biggest areas have been kept, which correspond to the cones that are supposed to be the closest to the car.
 
-First those two matrix needs to be merged in order to run the following algorithm only once.
+First, these two matrices need to be merged in order to run the following algorithm only once.
 Once this is done, we run a connected component detection algorithm to retrieve the blobs.
-For each one of them, from their center pixel is retrieved their color.
+For each one of them, their color is retrieved from their center pixel.
 This iteration aims at computing the lowest component for red and for yellow cones on the Y axis.
-After those points are found, their center is returned. This should be the direction of the car.
+After these two points are found, their center is returned. This is the direction the car will follow.
 
 ## Serial communication
 
-The Raspberry Pi is supposed to communicate its decisions with the Arduino card.
-It achieves the former through its GPIO ports. In the code, the `libpigpio` has been used.
+The Raspberry Pi communicates its decisions with the Arduino card, which in turn controls the mechanical parts of the car.
+This is done via serial communication through the Raspberry Pi's GPIO ports. In the code, the `libpigpio` library was used to establish the serial link between the Pi and the Arduino.
 
-A simple protocol was put in place: the Raspberry Pi program writes each digit of the angle, including the optional minus sign, followed by a newline character.
-When the Arduino card receives the newline character, it parses back the angle.
+A simple protocol was put in place: the Raspberry Pi program writes each digit of the angle to the serial output, including the optional minus sign at the start, followed by a newline character to represent the end of the message.
+When the Arduino card receives the newline character, it parses the message back to an angle stored in an integer format, which is then used to control the wheels of the car.
+
+## Raspberry Pi setup
+
+A few things had to be setup on the Raspberry Pi for the car to be autonomous and for it to be debugged remotely.
+
+### Operating system
+
+The Raspberry Pi OS Lite variant was chosen for the project in order to retain maximum performance and avoid installing unneeded components of an OS (e.g. desktop environments, services, etc.).
+
+### Networking and SSH
+
+The Pi was setup to automatically connect to one of our phones' Wi-Fi hotspots via NetworkManager, in order for us to be able to communicate with the Pi regardless of the location. In addition to that, we setup the SSH service to be started every time the Pi boots up. With this combination, we could power up the car anywhere and be able to remotely control it completely wirelessly, which sped up the debugging process tremendously.
+
+### Starting the program at boot time
+
+We used systemd to create a service that would automatically start the program on the Pi at the end of the boot sequence. This makes the car ready to go through the obstacle course as soon as it receives power and finishes booting up.
+
+### Debugging
+
+The Pi's program saves each processed frame to the current working directory. When we needed to debug the car's behavior, we used SFTP to transfer the saved frames from the Pi to one of our machines, where we could see the algorithm's output. That way, we were able to use frames where the output is incorrect to quickly debug the algorithm.
 
 ## Testing
 
