@@ -45,7 +45,7 @@ time.
 
 ### Step 1: identification of the cones
 
-First of all, the image is converted to *Hue Saturation Value* (HSV).
+First of all, the image is converted to the *Hue Saturation Value (HSV)* model.
 This allows for better isolation of cones.
 Arbitrary values are used to detect yellow and red pixels in the camera snapshot:
 - Yellow: between HSV(30, 100, 100) and HSV(50, 255, 255)
